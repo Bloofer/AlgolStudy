@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <stdlib.h>
 using namespace std;
 
 // constant variables
@@ -33,10 +34,18 @@ void go(int x, int y);
 void start_alg(string fileName); // main function for algorithm
 void print_result();
 void print_array();
+void print_point();
 
+// with better method
+int compare_point(const void *a, const void *b);
+int solve(int i);
+int num_of_paths(int i, int j);
+int combination(int a, int b);
+int factorial(int x);
 
 
 // function implementations
+// Dynamic Search
 
 void init(){
 
@@ -50,9 +59,11 @@ void init(){
     }
 
     // mark the obstacle indices
-    for (int i=0; i<k; i++){
+    for (int i=1; i<=k; i++){
         board[k_pair[i].x][k_pair[i].y] = true;        
     }
+
+    qsort(k_pair, k+2, sizeof(K_pair), compare_point);
 
 }
 
@@ -83,18 +94,80 @@ void start_alg(string fileName){
 
         cfile >> n >> m >> k;
 
-        for(int j=0; j<k; j++){
+        for(int j=1; j<=k; j++){
             cfile >> k_pair[j].x >> k_pair[j].y;
         }
 
-        init();
-        go(1,1);
-        test_result[i] = count;
+        // K0 = leftest&top point, Kk+1 = rightest&bottom point
+        k_pair[0].x = k_pair[0].y = 1;
+        k_pair[k+1].x = n;
+        k_pair[k+1].y = m;
 
-        cout << test_result[i] << endl;
+        init();
+        //go(1,1);
+        cout << solve(0);
+        //test_result[i] = count;
+
+        //cout << test_result[i] << endl;
     }
 
 }
+
+
+
+// function implementations
+// With better method
+
+int compare_point(const void *a, const void *b){
+    
+    K_pair *k1 = (K_pair *)a;
+    K_pair *k2 = (K_pair *)b;
+
+    if (k1->x > k2->x)
+        return 1;
+    else if ((k1->x == k2->x) && (k1->y > k2->y))
+        return 1;
+    else if (k1->x < k2->x)
+        return -1;
+    else if ((k1->x == k2->x) && (k1->y < k2->y))
+        return -1;
+    else 0;
+
+}
+
+int solve(int i){
+
+    int j = i + 1;
+
+    if (i >= k) return num_of_paths(i, k+1);
+    else return num_of_paths(i, k+1) - (num_of_paths(i, j) * solve(j));
+
+}
+
+int num_of_paths(int i, int j){
+
+    int a = (k_pair[j].x - k_pair[i].x) + (k_pair[j].y - k_pair[i].y);
+    int b = (k_pair[j].x - k_pair[i].x);
+    return combination(a, b);
+
+}
+
+int combination(int a, int b){
+
+    return factorial(a) / (factorial(b) * factorial(a - b));
+
+}
+
+int factorial(int x){
+
+    if(x > 1) return x * factorial(x - 1);
+    else return 1;
+
+}
+
+
+
+// test print functions
 
 void print_result(){
 
@@ -116,6 +189,14 @@ void print_array(){
 
 }
 
+void print_point(){
+
+    for(int i=0; i<=k+1; i++){
+        cout << "(" << k_pair[i].x << ", " << k_pair[i].y << ")\n";
+    }
+
+}
+
 
 // main function
 
@@ -127,7 +208,17 @@ int main(int argc, char** argv)
     }
 
     start_alg(argv[1]);
-    print_result();
+    //print_result();
+
+    // for test
+    /* n = m = 2;
+    k = 1;
+    k_pair[0].x = k_pair[0].y = 1;
+    k_pair[k+1].x = n;
+    k_pair[k+1].y = m;
+    k_pair[1].x = 2;
+    k_pair[1].y = 1;
+    cout<< solve(0); */
 
     return 0;
 }
