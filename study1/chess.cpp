@@ -9,6 +9,7 @@ const static int MAX_N = 10000;
 const static int MAX_M = 10000;
 const static int MAX_K = 2000;
 const static int MAX_TEST_NUM = 20;
+const static int MOD = 1000000007;
 
 // input variables
 int test_num;
@@ -41,7 +42,8 @@ int compare_point(const void *a, const void *b);
 int solve(int i);
 int num_of_paths(int i, int j);
 int combination(int a, int b);
-int factorial(int x);
+long long int factorial(long long int x);
+unsigned long long int factorial_iter(int number);
 
 
 // function implementations
@@ -49,7 +51,7 @@ int factorial(int x);
 
 void init(){
 
-    count = 0;
+    /* count = 0;
 
     // init board 2D array
     for (int i=1; i<=n; i++){
@@ -61,7 +63,7 @@ void init(){
     // mark the obstacle indices
     for (int i=1; i<=k; i++){
         board[k_pair[i].x][k_pair[i].y] = true;        
-    }
+    } */
 
     qsort(k_pair, k+2, sizeof(K_pair), compare_point);
 
@@ -105,8 +107,8 @@ void start_alg(string fileName){
 
         init();
         //go(1,1);
-        cout << solve(0);
-        //test_result[i] = count;
+        
+        test_result[i] = solve(0);
 
         //cout << test_result[i] << endl;
     }
@@ -131,7 +133,8 @@ int compare_point(const void *a, const void *b){
         return -1;
     else if ((k1->x == k2->x) && (k1->y < k2->y))
         return -1;
-    else 0;
+    else 
+        return 0;
 
 }
 
@@ -139,7 +142,7 @@ int solve(int i){
 
     int j = i + 1;
 
-    if (i >= k) return num_of_paths(i, k+1);
+    if (i > k) return 1;
     else return num_of_paths(i, k+1) - (num_of_paths(i, j) * solve(j));
 
 }
@@ -148,23 +151,34 @@ int num_of_paths(int i, int j){
 
     int a = (k_pair[j].x - k_pair[i].x) + (k_pair[j].y - k_pair[i].y);
     int b = (k_pair[j].x - k_pair[i].x);
+    cout << combination(a, b) << endl;
     return combination(a, b);
 
 }
 
 int combination(int a, int b){
 
-    return factorial(a) / (factorial(b) * factorial(a - b));
+    if ((factorial_iter(b) * factorial_iter(a - b)) == 0) return 0;
+    else return (int)(factorial_iter(a)) / (factorial_iter(b) * factorial_iter(a - b));
 
 }
 
-int factorial(int x){
+long long int factorial(long long int x){
 
-    if(x > 1) return x * factorial(x - 1);
+    if(x > 1) return (x % MOD * factorial(x - 1) % MOD);
     else return 1;
 
 }
 
+unsigned long long int factorial_iter(int number)
+{
+   int fact = 1;
+
+   for (int i = 1; i <= number; i++)
+      fact = fact * i % MOD;
+
+   return fact % MOD;
+}
 
 
 // test print functions
@@ -208,16 +222,22 @@ int main(int argc, char** argv)
     }
 
     start_alg(argv[1]);
-    //print_result();
+    print_result();
+    cout << combination(200,100);
+
+    //factorial_iter(100) % MOD;
 
     // for test
-    /* n = m = 2;
-    k = 1;
+    /* n = 3;
+    m = 4;
+    k = 2;
     k_pair[0].x = k_pair[0].y = 1;
     k_pair[k+1].x = n;
     k_pair[k+1].y = m;
     k_pair[1].x = 2;
-    k_pair[1].y = 1;
+    k_pair[1].y = 2;
+    k_pair[2].x = 2;
+    k_pair[2].y = 3;
     cout<< solve(0); */
 
     return 0;
