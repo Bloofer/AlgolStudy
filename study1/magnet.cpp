@@ -131,7 +131,7 @@ void init_rotate(){
     }
 }
 
-void apply_gravity(int lNum, int rNum, int rotation){
+void rotate_sub(int lNum, int rNum, int rotation){
     // [lNum, rNum]; the scope of rotation application
     // rotation; the direction of rotation. clockwise - 1 / counterclockwise - 0  
 
@@ -167,8 +167,8 @@ void start_rotate(int mNum, int rotation){
     to = rPair.second;
 
     if((from == 0) && (to == 0)) (*magnets[mNum-1]).rotate(rotation);
-    else if (((mNum - from) % 2) == 0) apply_gravity(from, to, rotation);
-    else apply_gravity(from, to, (-rotation));
+    else if (((mNum - from) % 2) == 0) rotate_sub(from, to, rotation);
+    else rotate_sub(from, to, (-rotation));
 }
 
 void start_alg(){
