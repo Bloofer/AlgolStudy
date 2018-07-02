@@ -165,7 +165,8 @@ int combination(int a, int b){
 
 long long int factorial(long long int x){
 
-    if(x > 1) return (x % MOD * factorial(x - 1) % MOD);
+    if(x == MOD) return factorial(x - 1) % MOD;
+    else if(x > 1) return (x % MOD * factorial(x - 1) % MOD);
     else return 1;
 
 }
@@ -174,8 +175,10 @@ unsigned long long int factorial_iter(int number)
 {
    int fact = 1;
 
-   for (int i = 1; i <= number; i++)
-      fact = fact * i % MOD;
+   for (int i = 1; i <= number; i++) {
+      if (fact == MOD) fact = i;
+      else fact = fact * i % MOD;
+   }
 
    return fact % MOD;
 }
