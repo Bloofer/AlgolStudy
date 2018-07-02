@@ -1,15 +1,12 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-
 using namespace std;
 
-int t;
-int k;
+int t, k;
 bool rotate[3];
 
 class Magnet{
-
     struct Node {
         int pole; // 0 - N / 1 - S
         Node *next;
@@ -25,9 +22,9 @@ public:
         Node *nextNode = head;
 
         while(nextNode != tail) {
-            Node *deleteMe = nextNode;
+            Node *delNode = nextNode;
             nextNode = nextNode->next;
-            delete deleteMe;
+            delete delNode;
         }
 
         delete nextNode;
@@ -40,14 +37,6 @@ public:
 
         head = n;
         nodeNum++;
-    }
-
-    void empty_magnet(){
-        do{
-            Node *n = head;
-            head = head->next;
-            delete n;
-        } while(head != NULL);
     }
 
     void init(){
@@ -115,112 +104,75 @@ public:
 private:
     Node *head, *left, *right, *tail;
     int nodeNum;
-
 };
 
-// main functions
-Magnet *fstMagnet, *sndMagnet, *thdMagnet, *fthMagnet;
+// magnets
+Magnet *magnets[4];
 
 int evaluate(){
-    int fst, snd, thd, fth;
-    fst = snd = thd = fth = 0;
+    int val = 1;
+    int sum = 0;
 
-    if ((*fstMagnet).get_head()) fst = 1;
-    if ((*sndMagnet).get_head()) snd = 2;
-    if ((*thdMagnet).get_head()) thd = 4;
-    if ((*fthMagnet).get_head()) fth = 8;
+    for(int i=0; i<4; i++){
+        if((*magnets[i]).get_head()) sum += val;
+        val *= 2;
+    }
 
-    return (fst + snd + thd + fth);
+    return sum;
 }
 
 bool check_same(Magnet *lMagnet, Magnet *rMagnet){
-
     return ((*lMagnet).get_right() == (*rMagnet).get_left());
-
 }
 
-void get_rotate_info(){
-
-    rotate[0] = !check_same(fstMagnet, sndMagnet);
-    rotate[1] = !check_same(sndMagnet, thdMagnet);
-    rotate[2] = !check_same(thdMagnet, fthMagnet);
-
+void init_rotate(){
+    for(int i=0; i<3; i++){
+        rotate[i] = !check_same(magnets[i], magnets[i+1]);
+    }
 }
 
 void apply_gravity(int lNum, int rNum, int rotation){
-    
     // [lNum, rNum]; the scope of rotation application
     // rotation; the direction of rotation. clockwise - 1 / counterclockwise - 0  
 
-    if(lNum == 1) {
-        if(rNum == 2) {
-            (*fstMagnet).rotate(rotation);
-            (*sndMagnet).rotate(-rotation);
-        } else if(rNum == 3) {
-            (*fstMagnet).rotate(rotation);
-            (*sndMagnet).rotate(-rotation);
-            (*thdMagnet).rotate(rotation);
-        } else if(rNum == 4) {
-            (*fstMagnet).rotate(rotation);
-            (*sndMagnet).rotate(-rotation);
-            (*thdMagnet).rotate(rotation);
-            (*fthMagnet).rotate(-rotation);
-        } 
-
-    } else if(lNum == 2) {
-        if(rNum == 3) {
-            (*sndMagnet).rotate(rotation);
-            (*thdMagnet).rotate(-rotation);
-        } else if(rNum == 4) {
-            (*sndMagnet).rotate(rotation);
-            (*thdMagnet).rotate(-rotation);
-            (*fthMagnet).rotate(rotation);
-        } 
-
-    } else if(lNum == 3) {
-        (*thdMagnet).rotate(rotation);
-        (*fthMagnet).rotate(-rotation);
+    int cnt = 0;
+    for(int i=lNum-1; i<rNum; i++){
+        if ((cnt % 2) == 0) (*magnets[i]).rotate(rotation);
+        else (*magnets[i]).rotate(-rotation);
+        cnt++;
     }
+}
 
+pair<int, int> get_range(int from){
+    if(!rotate[0] && !rotate[1] && !rotate[2]) return pair<int, int>(0, 0);
+    else if (rotate[0] && rotate[1] && rotate[2]) return pair<int, int>(1, 4);
+    else if (rotate[0] && rotate[1] && !rotate[2] && (from != 4)) return pair<int, int>(1, 3);
+    else if (!rotate[0] && rotate[1] && rotate[2] && (from != 1)) return pair<int, int>(2, 4);
+    else {
+        for(int i=0; i<3; i++) {
+            if(rotate[i] && ((from == i+1) || (from == i+2))) return pair<int, int>(i+1, i+2);
+        }
+    }
+    
+    return pair<int, int>(0, 0);
 }
 
 void start_rotate(int mNum, int rotation){
     // mNum; magnet number
     // rotation; the direction of rotation. clockwise - 1 / counterclockwise - 0  
-    if (mNum == 1){
-    // rotation start at the first magnet
-        if (rotate[0] && rotate[1] && rotate[2]) apply_gravity(1, 4, rotation);
-        else if (rotate[0] && rotate[1]) apply_gravity(1, 3, rotation);
-        else if (rotate[0]) apply_gravity(1, 2, rotation);
-        else (*fstMagnet).rotate(rotation);
-    } else if (mNum == 2){
-    // rotation start at the second magnet
-        if (rotate[0] && rotate[1] && rotate[2]) apply_gravity(1, 4, (-rotation));
-        else if (rotate[1] && rotate[2]) apply_gravity(2, 4, rotation);
-        else if (rotate[0] && rotate[1]) apply_gravity(1, 3, (-rotation));
-        else if (rotate[1]) apply_gravity(2, 3, rotation);
-        else if (rotate[0]) apply_gravity(1, 2, (-rotation));
-        else (*sndMagnet).rotate(rotation);
-    } else if (mNum == 3){
-    // rotation start at the third magnet
-        if (rotate[0] && rotate[1] && rotate[2]) apply_gravity(1, 4, rotation);
-        else if (rotate[0] && rotate[1]) apply_gravity(1, 3, rotation);
-        else if (rotate[1] && rotate[2]) apply_gravity(2, 4, (-rotation));
-        else if (rotate[1]) apply_gravity(2, 3, (-rotation));
-        else if (rotate[2]) apply_gravity(3, 4, rotation);
-        else (*thdMagnet).rotate(rotation);
-    } else {
-    // rotation start at the fourth magnet
-        if (rotate[0] && rotate[1] && rotate[2]) apply_gravity(1, 4, (-rotation));
-        else if (rotate[1] && rotate[2]) apply_gravity(2, 4, rotation);
-        else if (rotate[2]) apply_gravity(3, 4, (-rotation));
-        else (*fthMagnet).rotate(rotation);
-    }
 
+    int from, to;
+    pair<int, int> rPair = get_range(mNum);
+    from = rPair.first;
+    to = rPair.second;
+
+    if((from == 0) && (to == 0)) (*magnets[mNum-1]).rotate(rotation);
+    else if (((mNum - from) % 2) == 0) apply_gravity(from, to, rotation);
+    else apply_gravity(from, to, (-rotation));
 }
 
 void start_alg(){
-
+//void start_alg(string fileName){
     //fstream mfile(fileName.c_str());
     //mfile >> t;
     cin >> t;
@@ -233,57 +185,46 @@ void start_alg(){
         int p;
         int cnt = 0;
         rotate[0] = rotate[1] = rotate[2] = false;
-        fstMagnet = new Magnet();
-        sndMagnet = new Magnet();
-        thdMagnet = new Magnet();
-        fthMagnet = new Magnet();
+        for(int j=0; j<4; j++){
+            magnets[j] = new Magnet();
+        }
 
         for(int j=1; j<=32; j++) {
             //mfile >> p;
             cin >> p;
 
             if (cnt == 0){
-                (*fstMagnet).add_value(p);    
+                (*magnets[cnt]).add_value(p);    
             } else if (cnt == 1){
-                (*sndMagnet).add_value(p);    
+                (*magnets[cnt]).add_value(p);
             } else if (cnt == 2){
-                (*thdMagnet).add_value(p);    
+                (*magnets[cnt]).add_value(p);
             } else {
-                (*fthMagnet).add_value(p);    
+                (*magnets[cnt]).add_value(p);
             }
 
             if (j % 8 == 0) cnt++;
         }
 
-        (*fstMagnet).init();
-        (*sndMagnet).init();
-        (*thdMagnet).init();
-        (*fthMagnet).init();
+        for(int j=0; j<4; j++){
+            (*magnets[j]).init();
+        }
 
         int fst, snd;
         for(int j=0; j<k; j++){
             //mfile >> fst >> snd;
             cin >> fst >> snd;
-            get_rotate_info();
+            init_rotate();
             start_rotate(fst, snd);
         }
 
         cout << "#" << (i+1) << " " << evaluate() << endl;
-        delete fstMagnet;
-        delete sndMagnet;
-        delete thdMagnet;
-        delete fthMagnet;
     }
-
 }
 
 int main(int argc, char** argv){
 
-    /* if (argc < 2) {
-        cerr << "Usage : " << argv[0] << "TESTFILE" << endl;
-        return 1;
-    } */
-
+    //start_alg("sample_input.txt");
     start_alg();
 
     return 0;
