@@ -1,0 +1,13 @@
+{
+    "files.associations": {
+        "functional": "cpp",
+        "system_error": "cpp",
+        "type_traits": "cpp",
+        "*.tcc": "cpp",
+        "unordered_map": "cpp",
+        "vector": "cpp",
+        "array": "cpp",
+        "deque": "cpp",
+        "initializer_list": "cpp"
+    }
+}
