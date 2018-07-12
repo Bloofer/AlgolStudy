@@ -4,7 +4,7 @@
   
 링크 : [swexpertacademy.com](https://swexpertacademy.com/main/code/problem/problemDetail.do?contestProbId=AWIeUtVakTMDFAVH)  
   
-블로그 글 : [Bloofer Blog](https://jmyang.kr/2018/07/03/magnet/)  
+블로그 글 : [Bloofer Blog](https://jmyang.kr/2018/07/12/chef/)  
   
 **풀이 방법**  
 일단, 주어진 N개의 식재료에 대해서 각각 두개의 요리로 N/2개씩 나누는 방법을 고려한다. N개의 식재료 중 N/2개를 선택하는 모든 조합의 경우의 수를 고려하기 위해, DFS와 Back Tracking 알고리즘을 사용한다. 각각의 조합의 경우에서 나누어진 식재료들의 시너지의 합을 구하고, 매 수행시마다 각 요리의 시너지의 차의 최소값을 선택한다.   
