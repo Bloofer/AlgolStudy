@@ -1,55 +1,43 @@
 #include <iostream>
 #include <string>
-#include <fstream>
 #include <queue>
 using namespace std;
 
-int T, N, M, R, C, L;
 typedef struct{
     bool up, down, left, right;
     bool visited;
 }Hole;
-Hole holes[50][50];
-int input[50][50];
-int sol;
+
 typedef struct{
     int row, col, cnt, dir;
 }Call;
+
+int T, N, M, R, C, L;
+
+Hole holes[50][50];
 queue<Call> callQ;
+int input[50][50];
+int sol;
+
+void set_hole(int row, int col, int up, int down, int left, int right, int visited){
+    holes[row][col].up = up;
+    holes[row][col].down = down;
+    holes[row][col].left = left;
+    holes[row][col].right = right;
+    holes[row][col].visited = visited;
+}
 
 void init(){
     for(int j=0; j<N; j++){
         for(int k=0; k<M; k++){
-            if(input[j][k] == 0) holes[j][k].up = holes[j][k].down = holes[j][k].left
-                                = holes[j][k].right = holes[j][k].visited = 0;
-            else if(input[j][k] == 1) { holes[j][k].up = holes[j][k].down = holes[j][k].left
-                                = holes[j][k].right = 1; 
-                                holes[j][k].visited = 0;
-                                }
-            else if(input[j][k] == 2) { holes[j][k].up = holes[j][k].down = 1; 
-                                holes[j][k].visited = holes[j][k].left
-                                = holes[j][k].right = 0;
-                                }
-            else if(input[j][k] == 3) { holes[j][k].left = holes[j][k].right = 1; 
-                                holes[j][k].up = holes[j][k].down
-                                = holes[j][k].visited = 0;
-                                }
-            else if(input[j][k] == 4) { holes[j][k].up = holes[j][k].right = 1; 
-                                holes[j][k].left = holes[j][k].down
-                                = holes[j][k].visited = 0;
-                                }
-            else if(input[j][k] == 5) { holes[j][k].down = holes[j][k].right = 1; 
-                                holes[j][k].up = holes[j][k].left
-                                = holes[j][k].visited = 0;
-                                }
-            else if(input[j][k] == 6) { holes[j][k].left = holes[j][k].down = 1; 
-                                holes[j][k].up = holes[j][k].right
-                                = holes[j][k].visited = 0;
-                                }
-            else if(input[j][k] == 7) { holes[j][k].up = holes[j][k].left = 1; 
-                                holes[j][k].down = holes[j][k].right
-                                = holes[j][k].visited = 0;
-                                }
+            if(input[j][k] == 0) set_hole(j,k,0,0,0,0,0);
+            else if(input[j][k] == 1) set_hole(j,k,1,1,1,1,0);
+            else if(input[j][k] == 2) set_hole(j,k,1,1,0,0,0);
+            else if(input[j][k] == 3) set_hole(j,k,0,0,1,1,0);
+            else if(input[j][k] == 4) set_hole(j,k,1,0,0,1,0);
+            else if(input[j][k] == 5) set_hole(j,k,0,1,0,1,0);
+            else if(input[j][k] == 6) set_hole(j,k,0,1,1,0,0);
+            else if(input[j][k] == 7) set_hole(j,k,1,0,1,0,0);
             else {
                 cerr << "input error : input must be in between 0~7" << endl;
                 return;
@@ -59,46 +47,12 @@ void init(){
     sol = 0;
 }
 
-void test_print(){
-    cout << N << " " << M << " " << R << " " << C << " " << L << endl;
-    for(int j=0; j<N; j++){
-        for(int k=0; k<M; k++){
-            cout << input[j][k] << " ";
-        }
-        cout << endl;
-    }
+void set_call(Call &c, int row, int col, int cnt, int dir){
+    c.row = row;
+    c.col = col;
+    c.cnt = cnt;
+    c.dir = dir;
 }
-
-void print_holes(){
-    for(int i=0; i<N; i++){
-        for(int j=0; j<M; j++){
-            cout << holes[i][j].up << holes[i][j].down << holes[i][j].left 
-                 << holes[i][j].right << holes[i][j].visited << " ";
-        }
-        cout << endl;
-    }
-}
-
-/* void start_alg(int row, int col, int cnt, int dir){
-
-    //cout << row+1 << col+1 << "," << L-cnt << dir << " ";
-    if(dir == 1) { if(!holes[row][col].up) return; }
-    else if(dir == 2) { if(!holes[row][col].down) { return; } }
-    else if(dir == 3) { if(!holes[row][col].left) return; }
-    else if(dir == 4) { if(!holes[row][col].right) return; }
-
-    if(holes[row][col].visited || cnt < 0) return;
-    else {
-        //cout << " ! ";
-        holes[row][col].visited = 1;
-        sol++;
-        if(holes[row][col].up && row > 0) start_alg(row-1, col, cnt-1, 2);
-        if(holes[row][col].down && row < N-1) start_alg(row+1, col, cnt-1, 1);
-        if(holes[row][col].left && col > 0) start_alg(row, col-1, cnt-1, 4);
-        if(holes[row][col].right && col < M-1) start_alg(row, col+1, cnt-1, 3);
-    }
-
-} */
 
 void start_alg(){
 
@@ -113,39 +67,23 @@ void start_alg(){
 
         if(holes[tmpCall.row][tmpCall.col].visited || tmpCall.cnt < 0) continue;
         else {
-            //cout << " ! ";
             holes[tmpCall.row][tmpCall.col].visited = 1;
             sol++;
+            Call pushCall;
             if(holes[tmpCall.row][tmpCall.col].up && tmpCall.row > 0) {
-                Call pushCall;
-                pushCall.row = tmpCall.row-1;
-                pushCall.col = tmpCall.col;
-                pushCall.cnt = tmpCall.cnt-1;
-                pushCall.dir = 2;
+                set_call(pushCall, tmpCall.row-1, tmpCall.col, tmpCall.cnt-1, 2);
                 callQ.push(pushCall);
             }
             if(holes[tmpCall.row][tmpCall.col].down && tmpCall.row < N-1) {
-                Call pushCall;
-                pushCall.row = tmpCall.row+1;
-                pushCall.col = tmpCall.col;
-                pushCall.cnt = tmpCall.cnt-1;
-                pushCall.dir = 1;
+                set_call(pushCall, tmpCall.row+1, tmpCall.col, tmpCall.cnt-1, 1);
                 callQ.push(pushCall);
             }
             if(holes[tmpCall.row][tmpCall.col].left && tmpCall.col > 0) {
-                Call pushCall;
-                pushCall.row = tmpCall.row;
-                pushCall.col = tmpCall.col-1;
-                pushCall.cnt = tmpCall.cnt-1;
-                pushCall.dir = 4;
+                set_call(pushCall, tmpCall.row, tmpCall.col-1, tmpCall.cnt-1, 4);
                 callQ.push(pushCall);
             } 
             if(holes[tmpCall.row][tmpCall.col].right && tmpCall.col < M-1) {
-                Call pushCall;
-                pushCall.row = tmpCall.row;
-                pushCall.col = tmpCall.col+1;
-                pushCall.cnt = tmpCall.cnt-1;
-                pushCall.dir = 3;
+                set_call(pushCall, tmpCall.row, tmpCall.col+1, tmpCall.cnt-1, 3);
                 callQ.push(pushCall);
             } 
         }    
@@ -154,29 +92,19 @@ void start_alg(){
 
 }
 
-//void read_file(string fileName){
-void read_file(){
-    //ifstream iFile(fileName.c_str());
-    //iFile >> T;
+void get_input(){
     cin >> T;
 
     for(int i=0; i<T; i++){
-        //iFile >> N >> M >> R >> C >> L;
         cin >> N >> M >> R >> C >> L;
         for(int j=0; j<N; j++){
             for(int k=0; k<M; k++){
-                //iFile >> input[j][k];
                 cin >> input[j][k];
             }
         }
-        //test_print();
         init();
-        //print_holes();
         Call pushCall;
-        pushCall.row = R;
-        pushCall.col = C;
-        pushCall.cnt = L-1;
-        pushCall.dir = 0;
+        set_call(pushCall, R, C, L-1, 0);
         callQ.push(pushCall);
         start_alg();
         cout << "#" << i+1 << " " << sol << endl;
@@ -185,13 +113,7 @@ void read_file(){
 
 int main(int argc, char** argv){
 
-    /* if(argc < 2){
-        cerr << "Usage : ./a.out INPUTFILE" << endl;
-        return 1;
-    } */
-
-    //read_file(argv[1]);
-    read_file();
+    get_input();
 
     return 0;
 
