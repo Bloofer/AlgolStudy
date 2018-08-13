@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <queue>
 using namespace std;
 
 int T, N, M, R, C, L;
@@ -11,6 +12,10 @@ typedef struct{
 Hole holes[50][50];
 int input[50][50];
 int sol;
+typedef struct{
+    int row, col, cnt, dir;
+}Call;
+queue<Call> callQ;
 
 void init(){
     for(int j=0; j<N; j++){
@@ -74,7 +79,7 @@ void print_holes(){
     }
 }
 
-void start_alg(int row, int col, int cnt, int dir){
+/* void start_alg(int row, int col, int cnt, int dir){
 
     //cout << row+1 << col+1 << "," << L-cnt << dir << " ";
     if(dir == 1) { if(!holes[row][col].up) return; }
@@ -93,35 +98,100 @@ void start_alg(int row, int col, int cnt, int dir){
         if(holes[row][col].right && col < M-1) start_alg(row, col+1, cnt-1, 3);
     }
 
+} */
+
+void start_alg(){
+
+    while(!callQ.empty()){
+
+        Call tmpCall = callQ.front();
+        callQ.pop();
+        if(tmpCall.dir == 1) { if(!holes[tmpCall.row][tmpCall.col].up) continue; }
+        else if(tmpCall.dir == 2) { if(!holes[tmpCall.row][tmpCall.col].down) continue; }
+        else if(tmpCall.dir == 3) { if(!holes[tmpCall.row][tmpCall.col].left) continue; }
+        else if(tmpCall.dir == 4) { if(!holes[tmpCall.row][tmpCall.col].right) continue; }
+
+        if(holes[tmpCall.row][tmpCall.col].visited || tmpCall.cnt < 0) continue;
+        else {
+            //cout << " ! ";
+            holes[tmpCall.row][tmpCall.col].visited = 1;
+            sol++;
+            if(holes[tmpCall.row][tmpCall.col].up && tmpCall.row > 0) {
+                Call pushCall;
+                pushCall.row = tmpCall.row-1;
+                pushCall.col = tmpCall.col;
+                pushCall.cnt = tmpCall.cnt-1;
+                pushCall.dir = 2;
+                callQ.push(pushCall);
+            }
+            if(holes[tmpCall.row][tmpCall.col].down && tmpCall.row < N-1) {
+                Call pushCall;
+                pushCall.row = tmpCall.row+1;
+                pushCall.col = tmpCall.col;
+                pushCall.cnt = tmpCall.cnt-1;
+                pushCall.dir = 1;
+                callQ.push(pushCall);
+            }
+            if(holes[tmpCall.row][tmpCall.col].left && tmpCall.col > 0) {
+                Call pushCall;
+                pushCall.row = tmpCall.row;
+                pushCall.col = tmpCall.col-1;
+                pushCall.cnt = tmpCall.cnt-1;
+                pushCall.dir = 4;
+                callQ.push(pushCall);
+            } 
+            if(holes[tmpCall.row][tmpCall.col].right && tmpCall.col < M-1) {
+                Call pushCall;
+                pushCall.row = tmpCall.row;
+                pushCall.col = tmpCall.col+1;
+                pushCall.cnt = tmpCall.cnt-1;
+                pushCall.dir = 3;
+                callQ.push(pushCall);
+            } 
+        }    
+
+    }
+
 }
 
-void read_file(string fileName){
-    ifstream iFile(fileName.c_str());
-    iFile >> T;
+//void read_file(string fileName){
+void read_file(){
+    //ifstream iFile(fileName.c_str());
+    //iFile >> T;
+    cin >> T;
 
     for(int i=0; i<T; i++){
-        iFile >> N >> M >> R >> C >> L;
+        //iFile >> N >> M >> R >> C >> L;
+        cin >> N >> M >> R >> C >> L;
         for(int j=0; j<N; j++){
             for(int k=0; k<M; k++){
-                iFile >> input[j][k];
+                //iFile >> input[j][k];
+                cin >> input[j][k];
             }
         }
         //test_print();
         init();
         //print_holes();
-        start_alg(R, C, L-1, 0);
-        cout << sol << endl;
+        Call pushCall;
+        pushCall.row = R;
+        pushCall.col = C;
+        pushCall.cnt = L-1;
+        pushCall.dir = 0;
+        callQ.push(pushCall);
+        start_alg();
+        cout << "#" << i+1 << " " << sol << endl;
     }
 }
 
 int main(int argc, char** argv){
 
-    if(argc < 2){
+    /* if(argc < 2){
         cerr << "Usage : ./a.out INPUTFILE" << endl;
         return 1;
-    }
+    } */
 
-    read_file(argv[1]);
+    //read_file(argv[1]);
+    read_file();
 
     return 0;
 
