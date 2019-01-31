@@ -6,7 +6,7 @@ using namespace std;
 
 vector< vector<int> > wordMap; // 인접한 단어들끼리의 단어차이를 나타내는 맵. 알파벳 차이가 한개이면 1, 그 이상이면 0
 vector<string> wordVec;
-
+    
 int minPath = INT_MAX; // 최소값을 업데이트하면서 찾는다.
 bool visited[50]; // 인접 단어 배열 탐사시 사용
 
