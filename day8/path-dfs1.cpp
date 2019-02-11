@@ -29,12 +29,13 @@ void dfs(vector<string> v, string dept){
     }
 
     v.push_back(dept);
-    if(v.size()==ticketNum) {
+    if(v.size()==ticketNum+1) {
         pathVec = v;
+        //pathVec.push_back(ret.first->second);
         return;
     }
     for(mmit it=ret.first; it!=ret.second; ++it){
-        dfs(v, it->second);
+        dfs(v, it->second); // TODO: 여기서 방문된 노드 중복 방문하지 않도록 고쳐야 함
     }
 
 }
