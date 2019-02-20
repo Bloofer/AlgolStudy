@@ -31,10 +31,13 @@ void dfs(int cnt, int prev, int sum){
 
         if(!visit[i]){
             // 탐사안된 경로를 찾아 DFS
-            visit[i] = true;
-            dfs(cnt+1, i, sum+map[prev][i]);
-            //cout << cnt+1 << " " << i << " " << map[prev][i] << endl;
-            visit[i] = false;
+            if(minVal<sum+map[prev][i]){
+                visit[i] = true;
+                dfs(cnt+1, i, sum+map[prev][i]);
+                //cout << cnt+1 << " " << i << " " << map[prev][i] << endl;
+                visit[i] = false;
+            }
+            
         }
     }
 }
