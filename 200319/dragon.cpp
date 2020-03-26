@@ -11,6 +11,7 @@ struct dragonCurve {
 
 int hrz[101][100] = {0, }; // 가로선 배열
 int vtc[100][101] = {0, }; // 세로선 배열
+int arr[101][101] = {0, }; // 드래곤 커브 좌표판
 
 string get_next_gen(string gen) {
 	string revGen = gen;
@@ -49,14 +50,30 @@ void mark_dragon_curve(int x, int y, string drg) {
 		else if (drg.at(i) == '1') vtc[--curX][curY] = 1;
 		else if (drg.at(i) == '2') hrz[curX][--curY] = 1;
 		else if (drg.at(i) == '3') vtc[curX++][curY] = 1;
-	}	
+	}
+}
+
+void mark_array() {
+	for (int i = 0; i <= 100; i++) {
+		for (int j = 0; j <= 99; j++) {
+			if(hrz[i][j] == 1) {
+				arr[i][j] = 1;
+				arr[i][j + 1] = 1;
+			}
+			if(vtc[j][i] == 1) {
+				arr[j][i] = 1;
+				arr[j + 1][i] = 1;
+			}
+		}
+	}
 }
 
 int count_square() {
 	int cnt = 0;
-	for (int i = 0; i <= 100; i++) {
-		for (int j = 0; j <= 100; j++) {
-			if ((hrz[i][j] == 1 && hrz[i + 1][j] == 1) || (vtc[i][j] == 1 && vtc[i][j + 1] == 1)) cnt++;
+	for (int i = 0; i < 100; i++) {
+		for (int j = 0; j < 100; j++) {
+			//if ((hrz[i][j] == 1 && hrz[i + 1][j] == 1) || (vtc[i][j] == 1 && vtc[i][j + 1] == 1)) cnt++;
+			if(arr[i][j] == 1 && arr[i][j+1] == 1 && arr[i+1][j] == 1 && arr[i+1][j+1] == 1) cnt++;
 		}
 	}
 	return cnt;
@@ -72,7 +89,7 @@ void init() {
 
 int main() {
 	cin >> N;
-	
+
 	for (int i = 0; i < N; i++) {
 		cin >> dc[i].y;
 		cin >> dc[i].x;
@@ -81,9 +98,9 @@ int main() {
 		string dir = dc[i].d;
 		for (int j = 0; j < dc[i].g; j++) dir = get_next_gen(dir);
 		mark_dragon_curve(dc[i].x, dc[i].y, dir);
-		
 	}
 
+	mark_array();
 	cout << count_square() << endl;
 	//test_print();
 	//int a;
