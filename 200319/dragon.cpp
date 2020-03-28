@@ -24,24 +24,6 @@ string get_next_gen(string gen) {
 	return gen + revGen;
 }
 
-void test_print() {
-	cout << "horizontal" << endl;
-	for (int i = 0; i < 10; i++) {
-		for (int j = 0; j < 10; j++) {
-			cout << hrz[i][j];
-		}
-		cout << endl;
-	}
-
-	cout << "vertical" << endl;
-	for (int i = 0; i < 10; i++) {
-		for (int j = 0; j < 10; j++) {
-			cout << vtc[i][j];
-		}
-		cout << endl;
-	}
-}
-
 void mark_dragon_curve(int x, int y, string drg) {
 	int curX = x;
 	int curY = y;
@@ -72,19 +54,10 @@ int count_square() {
 	int cnt = 0;
 	for (int i = 0; i < 100; i++) {
 		for (int j = 0; j < 100; j++) {
-			//if ((hrz[i][j] == 1 && hrz[i + 1][j] == 1) || (vtc[i][j] == 1 && vtc[i][j + 1] == 1)) cnt++;
 			if(arr[i][j] == 1 && arr[i][j+1] == 1 && arr[i+1][j] == 1 && arr[i+1][j+1] == 1) cnt++;
 		}
 	}
 	return cnt;
-}
-
-void init() {
-	for (int i = 0; i < 101; i++) {
-		for (int j = 0; j < 100; j++) {
-			hrz[i][j] = 0;
-		}
-	}
 }
 
 int main() {
@@ -102,8 +75,5 @@ int main() {
 
 	mark_array();
 	cout << count_square() << endl;
-	//test_print();
-	//int a;
-	//cin >> a;
 	return 0;
 }
