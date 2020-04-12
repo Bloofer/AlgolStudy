@@ -29,20 +29,6 @@ string dir[6] = {"", "0", "02", "03", "023", "0123"};
 // 각 CCTV를 돌리는 경우의 수 고려
 // 1:X4, 2:X2, 3:X4:, 4:X4, 5:X1
 
-// 1. CCTV의 갯수만큼 각 회전방향 DFS(최대 8개) - 처음의 방향기준은 1: →,  2: ←→,  3: ↑→,  4: ←↑→, 5: ←↑→↓
-// 2. Visit 배열 사용, 모든 경우의 수 고려
-// 3. 모든 방향 완성시, 사각지대 수 계산
-// 4. 매회 최소 업데이트, 최종 최소값 반환
-
-void test_print() {
-	for (int i = 0; i < N; i++) {
-		for (int j = 0; j < M; j++) {
-			cout << arr[i][j] << " ";
-		}
-		cout << endl;
-	}
-}
-
 bool is_valid(int x, int y) {
 	bool inScope = (x >= 0 && x < N && y >=0 && y < M);
 	bool isEmpty = (arr[x][y] < 6);
@@ -84,27 +70,22 @@ int calculate_size(string dirs) {
 
 void dfs(int idx, string dirs) {
 	if (idx == cctvNum) {
-		// base case
 		int num = calculate_size(dirs);
 		minSize = min_val(minSize, num);
 		init_range();
 	}
 	else {
-		// recursive case
-		if (cctvDir[idx] == 1 || cctvDir[idx] == 3 || cctvDir[idx] == 4) {
-			// dfs(): 4방향으로 추가하고 재귀 호출
+		if (cctvDir[idx] == 1 || cctvDir[idx] == 3 || cctvDir[idx] == 4) { // 4방향으로 추가하고 재귀 호출
 			dfs(idx + 1, dirs + "0");
 			dfs(idx + 1, dirs + "1");
 			dfs(idx + 1, dirs + "2");
 			dfs(idx + 1, dirs + "3");
 		}
-		else if (cctvDir[idx] == 2) {
-			// dfs(): 2방향으로 추가하고 재귀 호출
+		else if (cctvDir[idx] == 2) { // 2방향으로 추가하고 재귀 호출
 			dfs(idx + 1, dirs + "0");
 			dfs(idx + 1, dirs + "1");
 		}
-		else {
-			// dfs(): 전방향이므로 회전 X, 재귀로 방향정보만 추가
+		else { // 전방향이므로 회전 X, 재귀로 방향정보만 추가
 			dfs(idx + 1, dirs + "0");
 		}
 

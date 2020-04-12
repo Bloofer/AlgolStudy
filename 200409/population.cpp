@@ -49,7 +49,7 @@ void divide_pop() {
 void move_pop(int x, int y) {
 	visit[x][y] = true;
 	groupVec.push_back(pair<int, int>(x, y));
-	
+
 	if (is_valid(x, y + 1)) { if (hrz[x][y] && !visit[x][y+1]) move_pop(x, y + 1); } // →
 	if (is_valid(x + 1, y)) { if (vtc[x][y] && !visit[x+1][y]) move_pop(x + 1, y); } // ↓
 	if (is_valid(x, y - 1)) { if (hrz[x][y - 1] && !visit[x][y-1]) move_pop(x, y - 1); } // ←
@@ -90,6 +90,5 @@ int main() {
 	}
 
 	cout << cnt;
-
 	return 0;
 }
