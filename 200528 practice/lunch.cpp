@@ -2,26 +2,23 @@
 #include <vector>
 #include <queue>
 #include <algorithm>
+#include <climits>
 using namespace std;
 
 int T, N;
 int arr[10][10];
 vector< pair<int, int> > pplVec;
-bool pplDown[10] = {0, }; // 사람이 내려갔는지 확인하는 배열. 벡터의 인덱스 나타냄
 vector< pair<int, int> > strVec;
 int strLen[2]; // 계단 길이
 vector<string> strCmb;
 priority_queue<int, vector<int>, greater<int>> waitQ[2];
-queue<int> strQ[2];
+int strQ[2][3];  // 계단 큐
+int qSize[2] = {0, }; // 계단큐의 길이
+int sol = INT_MAX;
 
-// 1. 각 계단별로 사람을 배치하는 조합을 구함 - dfs()
-// 2. 모든 조합에 대해서 계단 내려가기 시뮬레이션 수행 - simulate_stair()
-// 2-1. 모든 사람이 계단을 내려갈 때까지 무한루프 시작
-// 2-2. 1에서 정해진 대로 각 사람들은 해당 계단으로 이동
-// 2-2-1. 모든 인원들은 각 계단 대기큐로 이동, 각 인원은 해당 계단 도착 시간을 가짐
-// 2-3. 계단이 비어있는 경우 계단큐에 삽입, 차 있으면 계단 대기큐에서 대기
-// 2-4. 계단 큐에서 하나하나 이동하며 바닥으로 진입시 계단큐에서 pop, 계단 대키큐 인원은 push_back
-// 3. 모든 인원이 pplDown TRUE되면 종료
+int get_min(int a, int b){
+  return a < b ? a : b;
+}
 
 void dfs(int idx, string cmb){
   if(idx == pplVec.size()) {
@@ -37,12 +34,27 @@ int calculate_dist(int x1, int y1, int x2, int y2){
   return abs(x1 - x2) + abs(y1 - y2);
 }
 
-template<typename T> void print_queue(T& q) {
+template<typename T> void print_queue(T q) {
     while(!q.empty()) {
         std::cout << q.top() << " ";
         q.pop();
     }
     std::cout << '\n';
+}
+
+void pop_stairQ(int idx){
+  if(qSize[idx] == 0){
+    return;
+  } else if(qSize[idx] == 1){
+    strQ[idx][0] = 0;
+    qSize[idx] = 0;
+  } else{
+    for (int i = 1; i < qSize[idx]; i++) {
+      strQ[idx][i-1] = strQ[idx][i];
+    }
+    strQ[idx][qSize[idx] - 1] = 0;
+    qSize[idx]--;
+  }
 }
 
 void simulate_stair(string cmb){
@@ -57,21 +69,40 @@ void simulate_stair(string cmb){
   // 3. tick을 하나씩 증가시키며 strQ가 비어있을 경우 waitQ의 top을 pop하고 새로 strQ에 push_back
   // 4. 여기서 waitQ의 top은 tick이 자기자신보다 크거나 같아야만 진입가능
   int tick = 0;
-  //while(true){
-    //if(waitQ[0].empty() && waitQ[1].empty() && strQ[0].empty() && strQ[1].empty()) break;
-    // 큐1부터 확인 시작
-    for(auto it=waitQ[0].begin(); it!=waitQ[0].end(); ++it) (*it)++
 
+  while(true){
+    if(waitQ[0].empty() && waitQ[1].empty() && qSize[0] == 0 && qSize[1] == 0) break;
+    // 큐1/2 확인 시작
+    for (int i = 0; i < 2; i++) {
+      // 1. 계단 큐의 인원이 계단길이만큼 시간이 도달했으면 stair pop
+      for (int j = 0; j < qSize[i]; j++) {
+        if(strQ[i][j] >= strLen[i]) pop_stairQ(i);
+      }
+      // 2. 계단 큐가 비어있는 경우(현재 크기가 3보다 작은경우) && 대기 큐가 비지 않은 경우
+      //    대기 큐에서 인원한명 pop, 계단 큐에 삽입하고 계단 큐 크기 + 1
+      //    여기서 대기큐의 top은 tick + 1이 자기자신보다 작거나 같아야만 진입가능
+      while(qSize[i] < 3 && !waitQ[i].empty() && waitQ[i].top() <= tick+1){
+        waitQ[i].pop();
+        qSize[i]++;
+      }
+      // 3. 계단 큐의 인원들 시간 + 1
+      for (int j = 0; j < qSize[i]; j++) {
+        strQ[i][j]++;
+      }
+    }
     tick++;
-  //}
-
+  }
+  sol = get_min(sol, tick);
 }
 
 void init(){
   pplVec.clear();
   strVec.clear();
   strCmb.clear();
-  for (int i = 0; i < 10; i++) pplDown[i] = false;
+  for (int i = 0; i < waitQ[0].size(); i++) waitQ[0].pop();
+  for (int i = 0; i < waitQ[1].size(); i++) waitQ[1].pop();
+  qSize[0] = qSize[1] = 0;
+  sol = INT_MAX;
 }
 
 int main(){
@@ -91,10 +122,10 @@ int main(){
       }
     }
     dfs(0, "");
-    simulate_stair(strCmb[0]);
-    print_queue(waitQ[0]);
-  }
+    for(auto s:strCmb) simulate_stair(s);
 
+    cout << "#" << i + 1 << " " << sol + 1 << endl;
+  }
 
   return 0;
 }
