@@ -34,14 +34,6 @@ int calculate_dist(int x1, int y1, int x2, int y2){
   return abs(x1 - x2) + abs(y1 - y2);
 }
 
-template<typename T> void print_queue(T q) {
-    while(!q.empty()) {
-        std::cout << q.top() << " ";
-        q.pop();
-    }
-    std::cout << '\n';
-}
-
 void pop_stairQ(int idx){
   if(qSize[idx] == 0){
     return;
@@ -75,9 +67,7 @@ void simulate_stair(string cmb){
     // 큐1/2 확인 시작
     for (int i = 0; i < 2; i++) {
       // 1. 계단 큐의 인원이 계단길이만큼 시간이 도달했으면 stair pop
-      for (int j = 0; j < qSize[i]; j++) {
-        if(strQ[i][j] >= strLen[i]) pop_stairQ(i);
-      }
+      while(strQ[i][0] >= strLen[i]) pop_stairQ(i);
       // 2. 계단 큐가 비어있는 경우(현재 크기가 3보다 작은경우) && 대기 큐가 비지 않은 경우
       //    대기 큐에서 인원한명 pop, 계단 큐에 삽입하고 계단 큐 크기 + 1
       //    여기서 대기큐의 top은 tick + 1이 자기자신보다 작거나 같아야만 진입가능
@@ -123,7 +113,6 @@ int main(){
     }
     dfs(0, "");
     for(auto s:strCmb) simulate_stair(s);
-
     cout << "#" << i + 1 << " " << sol + 1 << endl;
   }
 
