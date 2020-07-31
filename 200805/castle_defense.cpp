@@ -29,8 +29,6 @@ bool comp(ENEMY e1, ENEMY e2){
 
 void simulate_defense(string s){
   int tmpArr[N][M];
-  int totalEnemy = 0;
-  int restEnemy = 0;
   int killedEnemy = 0;
   int defenseTurn = 0;
   for (int i = 0; i < N; i++) {
@@ -65,7 +63,6 @@ void simulate_defense(string s){
           e.x = p;
           e.y = q;
           enemVec.push_back(e);
-          if(i == 0) totalEnemy++;
         }
       }
     }
@@ -82,12 +79,12 @@ void simulate_defense(string s){
 
       // * 여기서 궁수의 사정거리 D안에 못드는 적은 죽이지 못하므로 제외
       // 1-3. 가장 가까운 위치에 있는 적 벡터의 첫번째 원소를 toKill에 저장하여 다음 판부터 제외
+      //      죽일 수 있는 적이 없는 경우 toKillX[j]에 -1을 할당하여 필터링
       if(!eVec[j].empty() && eVec[j].front().dist <= D) {
         toKillX[j] = eVec[j].front().x;
         toKillY[j] = eVec[j].front().y;
       } else {
         toKillX[j] = -1;
-        toKillY[j] = -1;
       }
 
     }
@@ -97,12 +94,6 @@ void simulate_defense(string s){
       if(toKillX[j] != -1 && tmpArr[toKillX[j]][toKillY[j]] != 0) {
         tmpArr[toKillX[j]][toKillY[j]] = 0;
         killedEnemy++;
-      }
-    }
-
-    if(i == defenseTurn - 1){
-      for (int j = 0; j < M; j++) {
-        if(tmpArr[N-1][j] == 1) restEnemy++;
       }
     }
 
@@ -117,7 +108,7 @@ void simulate_defense(string s){
     }
   }
 
-  // 4. 모든 적이 격자판에서 제외되면 |전체 적 - 남은 적의 수|를 계수
+  // 4. 모든 적이 격자판에서 제외되고 죽인 적이 계수되면 maxKill에 최대값을 업데이트
   maxKill = get_max(maxKill, killedEnemy);
 }
 
