@@ -328,19 +328,19 @@ int main(){
     int x, y;
     cin >> type[i] >> x >> y;
     input_red(type[i],x,y,i);
-    test_print();
+    //test_print();
     move_block(type[i],x,y,i);
     tetris_block();
     push_opaque();
     init();
   }
 
-  test_print();
+  //test_print();
   tetris_block();
-  test_print();
+  //test_print();
 
   count_blocks();
-  cout << score << endl << blocks;
+  cout << score << endl << blocks << endl;
 
   return 0;
 }
