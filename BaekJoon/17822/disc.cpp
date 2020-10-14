@@ -15,15 +15,6 @@ typedef struct{
   int x, y, len;
 }QSTRUCT;
 
-void test_print(){
-  for (int i = 0; i < N; i++) {
-    for (int j = 0; j < M; j++) {
-      cout << disc[i][j] << " ";
-    }
-    cout << endl;
-  }
-}
-
 void rotate_cw(int x, int k){ // x번 원판 k-길이만큼 시계방향 회전
   int tmp[M] = {0, };
   for (int i = 0; i < M; i++) tmp[i] = disc[x][i];
