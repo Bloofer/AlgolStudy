@@ -24,7 +24,6 @@ void bfs(int x, int y){
           cnt[nx][ny] = cnt[p.first][p.second] + 1;
           bfsQ.push(pair<int, int>(nx, ny));
         }
-
         nx += dx[i];
         ny += dy[i];
       }
@@ -46,6 +45,13 @@ int main(){
   }
 
   bfs(x,y);
+  for (int i = 0; i < H; i++) {
+    for (int j = 0; j < W; j++) {
+      cout << cnt[i][j];
+    }
+    cout << endl;
+  }
+
   cout << cnt[endX][endY]-1 << endl;
 
   return 0;
