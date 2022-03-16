@@ -28,15 +28,15 @@
 17144 | 미세먼지 안녕! | [통과](https://github.com/Bloofer/AlgolStudy/blob/master/BaekJoon/17144/ac.cpp) | https://algolstudy.tistory.com/3
 17143 | 낚시왕 | [통과](https://github.com/Bloofer/AlgolStudy/blob/master/BaekJoon/17143/fishing.cpp) | https://algolstudy.tistory.com/20
 17140 | 이차원 배열과 연산 | [통과](https://github.com/Bloofer/AlgolStudy/blob/master/BaekJoon/17140/array.cpp) | https://algolstudy.tistory.com/2
-17142 | 연구소 3 | TODO
-17779 | 게리맨더링 2 | TODO
+17142 | 연구소 3 | [통과](https://gist.github.com/Bloofer/c036b7e20549d1c4956381bed6a6d59e) | https://bloofer.net/36
+17779 | 게리맨더링 2 | [통과](https://gist.github.com/Bloofer/74b56d31471a7603ae787e6433f16b2b) | https://bloofer.net/60
 17837 | 새로운 게임 2 | [통과](https://github.com/Bloofer/AlgolStudy/blob/master/BaekJoon/17837/chess.cpp) | https://algolstudy.tistory.com/1
-17822 | 원판 돌리기 | TODO
-17825 | 주사위 윷놀이 | TODO
-19235 |	모노미노도미노 | 실패
+17822 | 원판 돌리기 | [통과](https://gist.github.com/Bloofer/25a8205ccceb582c2453714f9ce47f7e) | https://bloofer.net/64
+17825 | 주사위 윷놀이 | [통과](https://gist.github.com/Bloofer/f1d215cc6318970cae6790cd0d897dc6) | https://bloofer.net/65
+19235 |	모노미노도미노 | [통과](https://gist.github.com/Bloofer/8a2cac22bcc676b281e29dcd5b75809c) | https://bloofer.net/69
 19236	| 청소년 상어 | [통과](https://github.com/Bloofer/AlgolStudy/blob/master/BaekJoon/19236/shark.cpp) | https://algolstudy.tistory.com/1 | https://algolstudy.tistory.com/30
-19237	| 어른 상어 | TODO
-19238	| 스타트 택시 | TODO
+19237	| 어른 상어 | [통과](https://gist.github.com/Bloofer/824c945bb7761b8e525ab24086b5ff26) | https://bloofer.net/66
+19238	| 스타트 택시 | [통과](https://gist.github.com/Bloofer/0a699696d10f2e953c707e687b30f772) | https://bloofer.net/67
 
 ### 2. SW 역량 테스트 추천문제(https://rebas.kr/)
 문제번호 | 제목 | 코드 | 풀이
@@ -48,21 +48,19 @@
 16197 | 두 동전 | [통과](https://github.com/Bloofer/AlgolStudy/blob/master/BaekJoon/16197/coin.cpp) | https://algolstudy.tistory.com/32
 3055 | 탈출 | [통과](https://github.com/Bloofer/AlgolStudy/blob/master/BaekJoon/3055/flood.cpp) | https://algolstudy.tistory.com/34
 2529 | 부등호 | [통과](https://github.com/Bloofer/AlgolStudy/blob/master/BaekJoon/2529/nums.cpp) | https://algolstudy.tistory.com/33
-3987 | 보이저 1호 | TODO |
-2174 | 로봇 시뮬레이션 | TODO |
-16946 | 벽 부수고 이동하기 4 | TODO |
-2151 | 거울 설치 | TODO |
-1938 | 통나무 옮기기 | TODO |
-6087 | 레이저 통신 | TODO |
-9019 | DSLR | TODO |
-2468 | 안전 영역 | TODO |
-1726 | 로봇 | TODO |
-9328 | 열쇠 | TODO |
-1525 | 퍼즐 | TODO |
-2638 | 치즈 | TODO |
-1194 | 달이 차오른다, 가자. | TODO |
-1600 | 말이 되고픈 원숭이 | TODO |
-16509 | 장군 | TODO |
-17136 | 색종이 붙이기 | TODO |
-16637 | 괄호 추가하기 | TODO |
-16918 | 봄버맨 | TODO |
+3987 | 보이저 1호 | [통과](https://gist.github.com/Bloofer/48ce3c2acb6edf5dea228b866de01009) | https://bloofer.net/68
+2174 | 로봇 시뮬레이션 | [통과](https://gist.github.com/Bloofer/efee2e3aa7bf27cb5af3b9f159305b9d) | https://bloofer.net/70
+16946 | 벽 부수고 이동하기 4 | [통과](https://gist.github.com/Bloofer/acba0f8884f605650564124e9eac2657) | https://bloofer.net/71
+2151 | 거울 설치 | [통과](https://gist.github.com/Bloofer/646701fa671c927193df822d91786dc2) | https://bloofer.net/72
+1938 | 통나무 옮기기 | [통과](https://gist.github.com/Bloofer/01d81afb3b38d5df7f52a8c7f84e2954) | https://bloofer.net/73
+6087 | 레이저 통신 | [통과](https://gist.github.com/Bloofer/16f1c377da33ccab0be29882d5b641f8) | https://bloofer.net/76
+9019 | DSLR | [통과](https://gist.github.com/Bloofer/05059433d109856bbac8809058e341c4) | https://bloofer.net/77
+2468 | 안전 영역 | [통과](https://gist.github.com/Bloofer/038918af605eebbda45827783bf7ccc0) | https://bloofer.net/78
+1726 | 로봇 | [통과](https://gist.github.com/Bloofer/c25ad30df506c3c432df7aae2ea99106) | https://bloofer.net/89
+9328 | 열쇠 | [통과](https://gist.github.com/Bloofer/b1a5fa0832b9246692d9dd7e04022ab4) | https://bloofer.net/90
+1525 | 퍼즐 | [통과](https://gist.github.com/Bloofer/dd388e42b1c7fad306c29d4e4ee56f1b) | https://bloofer.net/91
+2638 | 치즈 | [통과](https://gist.github.com/Bloofer/e70f0516261295279cbe1b00dd25fdd5) | https://bloofer.net/79
+1194 | 달이 차오른다, 가자. | [통과](https://gist.github.com/Bloofer/574d04331fdbf9917023629e07128bbf) | https://bloofer.net/80
+1600 | 말이 되고픈 원숭이 | [통과](https://gist.github.com/Bloofer/9764dcb3ee5f83b23556bd13977720b2) | https://bloofer.net/75
+16509 | 장군 | [통과](https://gist.github.com/Bloofer/df40132e3851c1dc164cec25a496ec82) | https://bloofer.net/74
+16918 | 봄버맨 | [통과](https://gist.github.com/Bloofer/5d005bb3ec471d62a33b0a3041febdad) | https://bloofer.net/81
